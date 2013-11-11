@@ -1,0 +1,11 @@
+{
+	"name": "xtea-d",
+	"version": "0.0.1",
+	"description": "XTEA cryptography algorithm implementation in D (eXtended Tiny Encryption Algorithm)",
+	"licencse": "MIT",
+	"homepage": "https://github.com/Extrawurst/xtea-d",
+	"copyright": "Copyright © 2013, Stephan Dilly",
+	"authors": [
+		"Stephan Dilly"
+	]
+}
