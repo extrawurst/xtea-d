@@ -40,7 +40,7 @@ public class XTEA
 	}
 
 	/// Encrypt given block of 8 bytes
-	public void EncryptBlock(byte[] _bytes, int _offset)
+	private void EncryptBlock(byte[] _bytes, int _offset)
 	{
 		int v0 = ReadInt(_bytes, _offset);
 		int v1 = ReadInt(_bytes, _offset + 4);
@@ -59,7 +59,7 @@ public class XTEA
 	}
 
 	/// Decrypt given block of 8 bytes
-	public void DecryptBlock(byte[] _bytes, int _offset)
+	private void DecryptBlock(byte[] _bytes, int _offset)
 	{
 		int v0 = ReadInt(_bytes, _offset);
 		int v1 = ReadInt(_bytes, _offset + 4);
@@ -78,7 +78,7 @@ public class XTEA
 	}
 
 	/// Read 32 bit int from buffer
-	private int ReadInt(byte[] _bytes, int _offset)
+	private static int ReadInt(byte[] _bytes, int _offset) pure nothrow
 	{
 		return (((_bytes[_offset++] & 0xff) << 0)
 				| ((_bytes[_offset++] & 0xff) << 8)
@@ -87,7 +87,7 @@ public class XTEA
 	}
 
 	/// Write 32 bit int from buffer
-	private void StoreInt(int _value, byte[] _bytes, int _offset)
+	private static void StoreInt(int _value, byte[] _bytes, int _offset) pure nothrow
 	{
 		auto unsignedValue = cast(uint)_value;
 		_bytes[_offset++] = cast(byte)(unsignedValue >> 0);
