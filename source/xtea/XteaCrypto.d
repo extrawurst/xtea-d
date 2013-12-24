@@ -42,12 +42,12 @@ public class XTEA
 	/// Encrypt given block of 8 bytes
 	private void EncryptBlock(byte[] _bytes, int _offset)
 	{
-		int v0 = ReadInt(_bytes, _offset);
-		int v1 = ReadInt(_bytes, _offset + 4);
+		auto v0 = ReadInt(_bytes, _offset);
+		auto v1 = ReadInt(_bytes, _offset + 4);
 
 		int sum = 0;
 
-		for (int i = 0; i != m_rounds; i++)
+		foreach (i; 0..m_rounds)
 		{
 			v0 += ((v1 << 4 ^ cast(int)(cast(uint)v1 >> 5)) + v1) ^ (sum + m_key[sum & 3]);
 			sum += DELTA;
@@ -61,12 +61,12 @@ public class XTEA
 	/// Decrypt given block of 8 bytes
 	private void DecryptBlock(byte[] _bytes, int _offset)
 	{
-		int v0 = ReadInt(_bytes, _offset);
-		int v1 = ReadInt(_bytes, _offset + 4);
+		auto v0 = ReadInt(_bytes, _offset);
+		auto v1 = ReadInt(_bytes, _offset + 4);
 
 		auto sum = cast(int)(cast(uint)DELTA * cast(uint)m_rounds);
 
-		for (int i = 0; i != m_rounds; i++)
+		foreach (i; 0..m_rounds)
 		{
 			v1 -= ((v0 << 4 ^ cast(int)(cast(uint)v0 >> 5)) + v0) ^ (sum + m_key[cast(int)(cast(uint)sum >> 11) & 3]);
 			sum -= DELTA;
