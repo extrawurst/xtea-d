@@ -19,7 +19,7 @@ void main()
 
 	crypto.Decrypt(data);
 
-	writefln("decrpypted:\t%s",data);
+	writefln("decrypted:\t%s",data);
 
 	assert(equal(sourceData,data));
 }
