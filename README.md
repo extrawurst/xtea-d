@@ -12,7 +12,7 @@ This is a dub library (http://code.dlang.org/about). Just add dependancy to your
 {
 	...
 	"dependencies": {
-		"xtea-d": "~master",
+		"xtea-d": "~>0.1.0",
 		...
 	}
 }
