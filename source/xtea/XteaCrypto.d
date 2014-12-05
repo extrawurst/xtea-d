@@ -1,19 +1,19 @@
 module xtea.XteaCrypto;
 
 /++ 
- +	XTEA helper class
+ +	XTEA helper type
  +	see: http://en.wikipedia.org/wiki/XTEA
 +/
-public class XTEA
+public struct XTEA
 {
 	/// XTEA delta constant
 	private enum int DELTA = cast(int)0x9E3779B9;
 
 	/// Key - 4 integer
-	private const int[4] m_key;
+	private int[4] m_key;
 
 	/// Round to go - 64 are commonly used
-	private const int m_rounds;
+	private int m_rounds;
 
 	/// c'tor
 	public this(int[4] _key, int _rounds)
@@ -28,7 +28,7 @@ public class XTEA
 	public alias Crypt!(DecryptBlock) Decrypt;
 
 	///
-	private void Crypt(alias T)(byte[] _bytes, size_t _offset=0, long _count=-1)
+	private const void Crypt(alias T)(byte[] _bytes, size_t _offset=0, long _count=-1)
 	{
 		if(_count == -1)
 			_count = cast(long)(_bytes.length - _offset);
@@ -40,7 +40,7 @@ public class XTEA
 	}
 
 	/// Encrypt given block of 8 bytes
-	private void EncryptBlock(byte[] _bytes, size_t _offset)
+	private const void EncryptBlock(byte[] _bytes, size_t _offset)
 	{
 		auto v0 = ReadInt(_bytes, _offset);
 		auto v1 = ReadInt(_bytes, _offset + 4);
@@ -59,7 +59,7 @@ public class XTEA
 	}
 
 	/// Decrypt given block of 8 bytes
-	private void DecryptBlock(byte[] _bytes, size_t _offset)
+	private const void DecryptBlock(byte[] _bytes, size_t _offset)
 	{
 		auto v0 = ReadInt(_bytes, _offset);
 		auto v1 = ReadInt(_bytes, _offset + 4);
