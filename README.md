@@ -25,7 +25,7 @@ import xtea.XteaCrypto;
 
 void main()
 { 
-	auto crypto = new XTEA([1,2,3,4], 64);
+	auto crypto = XTEA([1,2,3,4], 64);
 
 	auto data = [0,1,2,3,4,5,6,7];
 
