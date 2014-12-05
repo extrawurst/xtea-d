@@ -153,3 +153,7 @@ xtea-d.sln
 xtea-d.visualdproj
 xtea-d_d.exe
 xtea-d_d.exe_cv
+.dub/dub.json
+dub.selections.json
+xtea-d.exe
+xtea-d.lib
