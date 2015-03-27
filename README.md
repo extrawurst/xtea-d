@@ -1,5 +1,6 @@
 xtea-d
 ======
+[![Build Status](https://travis-ci.org/Extrawurst/xtea-d.svg)](https://travis-ci.org/Extrawurst/xtea-d)
 
 XTEA cryptography algorithm implementation in D (eXtended Tiny Encryption Algorithm)
 
