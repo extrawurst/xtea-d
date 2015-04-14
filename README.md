@@ -1,6 +1,5 @@
-xtea-d
+xtea-d [![Build Status](https://travis-ci.org/Extrawurst/xtea-d.svg)](https://travis-ci.org/Extrawurst/xtea-d) [![Coverage Status](https://coveralls.io/repos/Extrawurst/xtea-d/badge.svg?branch=master)](https://coveralls.io/r/Extrawurst/xtea-d?branch=master)
 ======
-[![Build Status](https://travis-ci.org/Extrawurst/xtea-d.svg)](https://travis-ci.org/Extrawurst/xtea-d)
 
 XTEA cryptography algorithm implementation in D (eXtended Tiny Encryption Algorithm)
 
