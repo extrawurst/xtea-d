@@ -13,7 +13,7 @@ os:
   - linux
 
 install:
-  - wget -O doveralls "https://github.com/ColdenCullen/doveralls/releases/download/v1.1.4/doveralls_linux_travis"
+  - wget -O doveralls "https://github.com/ColdenCullen/doveralls/releases/download/v1.1.5/doveralls_linux_travis"
 
 script:
   - dub test -b unittest-cov
