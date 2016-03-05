@@ -1,5 +1,41 @@
 module xtea.XteaCrypto;
 
+ubyte[] encrypt(XTEA crypto, const(ubyte)[] m)
+{
+	auto ans = m.dup;
+	crypto.Encrypt(ans);
+	return ans;
+}
+unittest
+{
+	enum sourceData = cast(ubyte[])[6, 2, 87, 66, 77, 289, 623, 39823];
+	enum encrypted = XTEA([1,2,3,4], 64).encrypt(sourceData);
+	import std.algorithm:equal;
+	static assert(encrypted.equal([49, 144, 90, 128, 35, 56, 194, 0]));
+}
+
+ubyte[] decrypt(XTEA crypto, const(ubyte)[] m) {
+	auto ans = m.dup;
+	crypto.Decrypt(ans);
+	return ans;
+}
+unittest
+{
+	enum sourceData = cast(ubyte[])[6, 2, 87, 66, 77, 289, 623, 39823];
+	enum encrypted = cast(ubyte[])[49, 144, 90, 128, 35, 56, 194, 0];
+	enum dencrypted = XTEA([1,2,3,4], 64).decrypt(encrypted);
+	import std.algorithm:equal;
+	static assert(dencrypted.equal(sourceData));
+}
+// Coverage %
+unittest {
+	enum sourceData = cast(ubyte[])[6, 2, 87, 66, 77, 289, 623, 39823];
+	enum crypto = XTEA([1,2,3,4], 64);
+	auto runtime = crypto.decrypt(crypto.encrypt(sourceData));
+	import std.algorithm:equal;
+	assert(runtime.equal(sourceData));
+}
+
 /++ 
  +	XTEA helper type
  +	see: http://en.wikipedia.org/wiki/XTEA
