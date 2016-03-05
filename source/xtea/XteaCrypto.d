@@ -1,5 +1,41 @@
 module xtea.XteaCrypto;
 
+ubyte[] encrypt(XTEA crypto, const(ubyte)[] m)
+{
+	auto ans = m.dup;
+	crypto.Encrypt(ans);
+	return ans;
+}
+unittest
+{
+	enum sourceData = cast(ubyte[])[6, 2, 87, 66, 77, 289, 623, 39823];
+	enum encrypted = XTEA([1,2,3,4], 64).encrypt(sourceData);
+	import std.algorithm:equal;
+	static assert(encrypted.equal([49, 144, 90, 128, 35, 56, 194, 0]));
+}
+
+ubyte[] decrypt(XTEA crypto, const(ubyte)[] m) {
+	auto ans = m.dup;
+	crypto.Decrypt(ans);
+	return ans;
+}
+unittest
+{
+	enum sourceData = cast(ubyte[])[6, 2, 87, 66, 77, 289, 623, 39823];
+	enum encrypted = cast(ubyte[])[49, 144, 90, 128, 35, 56, 194, 0];
+	enum dencrypted = XTEA([1,2,3,4], 64).decrypt(encrypted);
+	import std.algorithm:equal;
+	static assert(dencrypted.equal(sourceData));
+}
+// Coverage %
+unittest {
+	enum sourceData = cast(ubyte[])[6, 2, 87, 66, 77, 289, 623, 39823];
+	enum crypto = XTEA([1,2,3,4], 64);
+	auto runtime = crypto.decrypt(crypto.encrypt(sourceData));
+	import std.algorithm:equal;
+	assert(runtime.equal(sourceData));
+}
+
 /++ 
  +	XTEA helper type
  +	see: http://en.wikipedia.org/wiki/XTEA
@@ -22,28 +58,28 @@ public struct XTEA
 		m_rounds = _rounds;
 	}
 
-	/// Encrypt given byte array (length to be crypted must be 8 byte aligned)
+	/// Encrypt given ubyte array (length to be crypted must be 8 ubyte aligned)
 	public alias Crypt!(EncryptBlock) Encrypt;
-	/// Decrypt given byte array (length to be crypted must be 8 byte aligned)
+	/// Decrypt given ubyte array (length to be crypted must be 8 ubyte aligned)
 	public alias Crypt!(DecryptBlock) Decrypt;
 
 	///
-	private const void Crypt(alias T)(byte[] _bytes, size_t _offset=0, long _count=-1)
+	private const void Crypt(alias T)(ubyte[] _ubytes, size_t _offset=0, long _count=-1)
 	{
 		if(_count == -1)
-			_count = cast(long)(_bytes.length - _offset);
+			_count = cast(long)(_ubytes.length - _offset);
 
 		assert(_count % 8 == 0);
 
 		for (size_t i = _offset; i < (_offset+_count); i += 8)
-			T(_bytes, i);
+			T(_ubytes, i);
 	}
 
-	/// Encrypt given block of 8 bytes
-	private const void EncryptBlock(byte[] _bytes, size_t _offset)
+	/// Encrypt given block of 8 ubytes
+	private const void EncryptBlock(ubyte[] _ubytes, size_t _offset)
 	{
-		auto v0 = ReadInt(_bytes, _offset);
-		auto v1 = ReadInt(_bytes, _offset + 4);
+		auto v0 = ReadInt(_ubytes, _offset);
+		auto v1 = ReadInt(_ubytes, _offset + 4);
 
 		int sum = 0;
 
@@ -54,15 +90,15 @@ public struct XTEA
 			v1 += ((v0 << 4 ^ cast(int)(cast(uint)v0 >> 5)) + v0) ^ (sum + m_key[cast(int)(cast(uint)sum >> 11) & 3]);
 		}
 
-		StoreInt(v0, _bytes, _offset);
-		StoreInt(v1, _bytes, _offset + 4);
+		StoreInt(v0, _ubytes, _offset);
+		StoreInt(v1, _ubytes, _offset + 4);
 	}
 
-	/// Decrypt given block of 8 bytes
-	private const void DecryptBlock(byte[] _bytes, size_t _offset)
+	/// Decrypt given block of 8 ubytes
+	private const void DecryptBlock(ubyte[] _ubytes, size_t _offset)
 	{
-		auto v0 = ReadInt(_bytes, _offset);
-		auto v1 = ReadInt(_bytes, _offset + 4);
+		auto v0 = ReadInt(_ubytes, _offset);
+		auto v1 = ReadInt(_ubytes, _offset + 4);
 
 		auto sum = cast(int)(cast(uint)DELTA * cast(uint)m_rounds);
 
@@ -73,27 +109,27 @@ public struct XTEA
 			v0 -= ((v1 << 4 ^ cast(int)(cast(uint)v1 >> 5)) + v1) ^ (sum + m_key[sum & 3]);
 		}
 
-		StoreInt(v0, _bytes, _offset);
-		StoreInt(v1, _bytes, _offset + 4);
+		StoreInt(v0, _ubytes, _offset);
+		StoreInt(v1, _ubytes, _offset + 4);
 	}
 
 	/// Read 32 bit int from buffer
-	private static int ReadInt(byte[] _bytes, size_t _offset) pure nothrow
+	private static int ReadInt(ubyte[] _ubytes, size_t _offset) pure nothrow
 	{
-		return (((_bytes[_offset++] & 0xff) << 0)
-				| ((_bytes[_offset++] & 0xff) << 8)
-				| ((_bytes[_offset++] & 0xff) << 16)
-				| ((_bytes[_offset] & 0xff) << 24));
+		return (((_ubytes[_offset++] & 0xff) << 0)
+				| ((_ubytes[_offset++] & 0xff) << 8)
+				| ((_ubytes[_offset++] & 0xff) << 16)
+				| ((_ubytes[_offset] & 0xff) << 24));
 	}
 
 	/// Write 32 bit int from buffer
-	private static void StoreInt(int _value, byte[] _bytes, size_t _offset) pure nothrow
+	private static void StoreInt(int _value, ubyte[] _ubytes, size_t _offset) pure nothrow
 	{
 		auto unsignedValue = cast(uint)_value;
-		_bytes[_offset++] = cast(byte)(unsignedValue >> 0);
-		_bytes[_offset++] = cast(byte)(unsignedValue >> 8);
-		_bytes[_offset++] = cast(byte)(unsignedValue >> 16);
-		_bytes[_offset] = cast(byte)(unsignedValue >> 24);
+		_ubytes[_offset++] = cast(ubyte)(unsignedValue >> 0);
+		_ubytes[_offset++] = cast(ubyte)(unsignedValue >> 8);
+		_ubytes[_offset++] = cast(ubyte)(unsignedValue >> 16);
+		_ubytes[_offset] = cast(ubyte)(unsignedValue >> 24);
 	}
 }
 
@@ -102,7 +138,7 @@ unittest
     import std.algorithm:equal;
     import std.stdio;
 
-    enum byte[] sourceData = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+    enum ubyte[] sourceData = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
     
     auto crypto = XTEA([1,2,3,4], 64);
     
