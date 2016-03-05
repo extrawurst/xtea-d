@@ -107,10 +107,10 @@ unittest
     import std.algorithm:equal;
 
     enum ubyte[] sourceData = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+    ubyte[] data = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
     
     auto crypto = XTEA([1,2,3,4], 64);
-    
-    auto data = sourceData.dup;
+
     crypto.Encrypt(data);
     crypto.Decrypt(data);
     assert(equal(sourceData,data));
