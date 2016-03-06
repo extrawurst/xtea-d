@@ -1,4 +1,7 @@
 module xtea.XteaCrypto;
+@safe:
+nothrow:
+pure:
 
 ubyte[] encrypt(XTEA crypto, const(ubyte)[] m)
 {
@@ -42,6 +45,9 @@ unittest {
 +/
 public struct XTEA
 {
+@safe:
+nothrow:
+pure:
 	/// XTEA delta constant
 	private enum int DELTA = cast(int)0x9E3779B9;
 
@@ -114,7 +120,7 @@ public struct XTEA
 	}
 
 	/// Read 32 bit int from buffer
-	private static int ReadInt(ubyte[] _ubytes, size_t _offset) pure nothrow
+	private static int ReadInt(ubyte[] _ubytes, size_t _offset)
 	{
 		return (((_ubytes[_offset++] & 0xff) << 0)
 				| ((_ubytes[_offset++] & 0xff) << 8)
@@ -123,7 +129,7 @@ public struct XTEA
 	}
 
 	/// Write 32 bit int from buffer
-	private static void StoreInt(int _value, ubyte[] _ubytes, size_t _offset) pure nothrow
+	private static void StoreInt(int _value, ubyte[] _ubytes, size_t _offset)
 	{
 		auto unsignedValue = cast(uint)_value;
 		_ubytes[_offset++] = cast(ubyte)(unsignedValue >> 0);
@@ -132,31 +138,16 @@ public struct XTEA
 		_ubytes[_offset] = cast(ubyte)(unsignedValue >> 24);
 	}
 }
-
 unittest
 {
     import std.algorithm:equal;
-    import std.stdio;
 
     enum ubyte[] sourceData = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+    ubyte[] data = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
     
     auto crypto = XTEA([1,2,3,4], 64);
-    
-    auto data = sourceData.dup;
 
-    writeln("\nunittest starting:\n");
-
-    writefln("data:\t\t%s",data);
-    
     crypto.Encrypt(data);
-    
-    writefln("encrypted:\t%s",data);
-    
     crypto.Decrypt(data);
-    
-    writefln("decrypted:\t%s",data);
-    
     assert(equal(sourceData,data));
-
-    writeln("\nunittest ended");
 }
