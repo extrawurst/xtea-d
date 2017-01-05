@@ -1,4 +1,4 @@
-xtea-d [![Build Status](https://travis-ci.org/Extrawurst/xtea-d.svg)](https://travis-ci.org/Extrawurst/xtea-d) [![Coverage Status](https://coveralls.io/repos/Extrawurst/xtea-d/badge.svg?branch=master)](https://coveralls.io/r/Extrawurst/xtea-d?branch=master)
+xtea-d [![Build Status](https://travis-ci.org/Extrawurst/xtea-d.svg)](https://travis-ci.org/Extrawurst/xtea-d) [![Coverage Status](https://coveralls.io/repos/Extrawurst/xtea-d/badge.svg?branch=master)](https://coveralls.io/r/Extrawurst/xtea-d?branch=master) [![version](https://img.shields.io/dub/v/xtea-d.svg)](https://code.dlang.org/packages/xtea-d) [![downloads](https://img.shields.io/dub/dt/xtea-d.svg)](https://code.dlang.org/packages/xtea-d)
 ======
 
 XTEA cryptography algorithm implementation in D (eXtended Tiny Encryption Algorithm)
