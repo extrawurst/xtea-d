@@ -9,8 +9,9 @@ ubyte[] encrypt(XTEA crypto, const(ubyte)[] m)
 	crypto.Encrypt(ans);
 	return ans;
 }
-unittest
+@nogc unittest
 {
+
 	enum sourceData = cast(ubyte[])[6, 2, 87, 66, 77, 289, 623, 39823];
 	enum encrypted = XTEA([1,2,3,4], 64).encrypt(sourceData);
 	import std.algorithm:equal;
@@ -39,7 +40,7 @@ unittest {
 	assert(runtime.equal(sourceData));
 }
 
-/++ 
+/++
  +	XTEA helper type
  +	see: http://en.wikipedia.org/wiki/XTEA
 +/
@@ -48,6 +49,8 @@ public struct XTEA
 @safe:
 nothrow:
 pure:
+@nogc:
+
 	/// XTEA delta constant
 	private enum int DELTA = cast(int)0x9E3779B9;
 
@@ -138,16 +141,15 @@ pure:
 		_ubytes[_offset] = cast(ubyte)(unsignedValue >> 24);
 	}
 }
-unittest
-{
-    import std.algorithm:equal;
 
-    enum ubyte[] sourceData = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
-    ubyte[] data = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
-    
+@nogc unittest
+{
+    ubyte[16] sourceData = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+    ubyte[16] data       = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+
     auto crypto = XTEA([1,2,3,4], 64);
 
     crypto.Encrypt(data);
     crypto.Decrypt(data);
-    assert(equal(sourceData,data));
+    assert(sourceData == data);
 }
