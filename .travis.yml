@@ -3,7 +3,11 @@ language: d
 sudo: false
 
 d:
-  - dmd #-2.070.2
+  - dmd-beta
+  - dmd-2.082.0
+  - dmd-2.081.2
+  - dmd-2.080.1
+  - dmd-2.069.2
   - dmd-2.069.2
   - dmd-2.068.2
   - dmd-2.067.1
