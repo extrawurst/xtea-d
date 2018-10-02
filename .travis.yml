@@ -4,6 +4,7 @@ sudo: false
 
 d:
   - dmd-beta
+  - dmd-nightly
   - dmd-2.082.0
   - dmd-2.081.2
   - dmd-2.080.1
