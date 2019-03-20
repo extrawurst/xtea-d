@@ -67,6 +67,23 @@ pure:
 		m_rounds = _rounds;
 	}
 
+	~this() @trusted
+	{
+        version (LDC) if (!__ctfe)
+        {
+            import ldc.intrinsics : llvm_memset;
+            // llvm_memset with the last parameter set to "true" is guaranteed
+            // not to be elided by the compiler even if the compiler determines
+            // the new values are never read.
+            static if (is(typeof(llvm_memset(array.ptr, 0, array.length * T.sizeof, true)))) // LLVM 7+
+                llvm_memset(&m_key, 0, m_key.sizeof, true);
+            else // Pre-LLVM 7
+                llvm_memset(&m_key, 0, m_key.sizeof, m_key.alignof, true);
+            return;
+        }
+        m_key[] = 0;
+	}
+
 	/// Encrypt given ubyte array (length to be crypted must be 8 ubyte aligned)
 	public alias Crypt!(EncryptBlock) Encrypt;
 	/// Decrypt given ubyte array (length to be crypted must be 8 ubyte aligned)
